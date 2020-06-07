@@ -41,8 +41,6 @@ def myInput(event):
         state[request.sid] += 1
     else:
         state[request.sid] = 0
-    print("STR IS")
-    print(str(event))
     if (state[request.sid]<len(replies) and re.search("^{'message': 'command:", str(event))): # checks if the user is sending a command before bot responds
         time.sleep(2)
         print(state[request.sid], len(replies), replies)
