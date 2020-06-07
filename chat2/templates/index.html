@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <title>Hello2</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
+    <style>
+        #output {
+            background: #aaa;
+            margin: 20px;
+            padding: 20px;
+            font-size: 30px;
+            border: 2px solid black;
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+
+        .username {
+            padding: 10px;
+            font-weight: 600;
+            border-right: 2px solid black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id='output'></div>
+    <input id='input' type='text' placeholder="type something"></input>
+    <input id='name' type='text' placeholder="username"></input>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on("output", (event) => {
+            console.log(" got: ")
+            console.log(event)
+
+            var output = document.getElementById("output")
+            output.innerHTML += "<div class='message'><span class='username'>" + event.username + "</span> <span class='message'>" + event.message + "</span></div>"
+            $("#output").animate({scrollTop: $("#output")[0].scrollHeight}, 200)
+        })
+
+        var input = document.getElementById("input")
+
+        input.addEventListener("keyup", (event) => {
+            if (event.keyCode === 13) {
+                var name = document.getElementById("name")
+                socket.emit("input", { message: input.value, username: name.value })
+
+                input.value = ""
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
