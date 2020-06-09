@@ -7,6 +7,8 @@ from flask_socketio import emit
 import time, os
 from flask import request
 from textblob import TextBlob
+from selenium import webdriver
+import nltk
 
 import random
 import string
@@ -16,6 +18,21 @@ import time
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
+
+
+driver = webdriver.Chrome('/Users/chris/Downloads/chromedriver') 
+driver.get('http://localhost:8000/thisone.materials/Release/play.html')
+#line 24 will need to be Neha's address for ngrok server that has inform7 game
+time.sleep(1)
+
+def setInput(input):
+    driver.find_element_by_id("lineinput-field").clear()
+    driver.find_element_by_id("lineinput-field").send_keys(input)
+    driver.find_element_by_id("lineinput-field").send_keys("\n")
+
+
+def getOutput():
+    return ("\n".join([n.text for n in driver.find_elements_by_class_name("previous")[0].find_elements_by_tag_name("span")])).strip()
 
 @app.route('/')
 def sessions():
@@ -96,6 +113,8 @@ def myInput(event):
         if message_conts_word(event['message'], "ghost"):
             event["message"] = ghostify(event["message"])
     socketio.emit("output", event) # sends to everone
+    setInput(event["message"])
+    time.sleep(2)
     # socketio.emit("output", event, include_self=False) # sends to everyone, except the browser that originated the event
     #emit("output", event) # send only to the browser that originated the event
     if (request.sid in state):
@@ -103,10 +122,9 @@ def myInput(event):
     else:
         state[request.sid] = 0
     if (state[request.sid]<len(replies) and re.search("^{'message': 'command:", str(event))):
-        time.sleep(2)
+        time.sleep(0.5)
         print(state[request.sid], len(replies), replies)
-        emit("output", dict(message=replies[state[request.sid]], username='fake username'))
-
+        emit("output", dict(message=getOutput(), username='fake username'))
 
 
 def check():
