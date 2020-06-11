@@ -106,47 +106,12 @@ def only_all_caps(message):
     return caps
 
 
-beginning_str = "Welcome to the game. You can chat with each other via this chatroom, or interface with the game engine by typing ‘command:’ followed by what you want to do. I’ll be your eyes and ears. Directions we can go are “forward”, “aft (or back)”, “up”, and  “down.” It looks like we’re starting in a cool, dark place."
-begin = 1
-
 @socketio.on('input')
 def myInput(event):
+    beginning_str = "Welcome to the game. You can chat with each other via this chatroom, or interface with the game engine by typing ‘command:’ followed by what you want to do. I’ll be your eyes and ears. Directions we can go are “forward”, “aft (or back)”, “up”, and  “down.” It looks like we’re starting in a cool, dark place."
     print(" sending %s onwards ..." % event)
     print(request.sid)
-    username_lock = False
-    if username_lock:
-        event['username'] = "Travis"
-    if event['message']:
-        if message_conts_word(event["message"], "lights"):
-            socketio.emit("lights_out", True)
-    if begin:
-        socketio.emit("output", dict(message=beginning_str, username='bot'))
-        begin = 0
-    
-    #GET OUT PUT
-    out = getOutput()
-    
-    #CHAT MODS
-    if message_conts_word(str(out), "Flashlight") and message_conts_word(str(out), "switch"):
-        socketio.emit("lights_out", True)
-    if message_conts_word(str(out), "bunks")
-        event["message"] = ghostify(event["message"])
-    if message_conts_word(str(out), "Engine"):
-        event["message"] = only_all_caps(event["message"])
-    if message_conts_word(str(out), "taste"):
-        event["message"] = scramble_output(event["message"])
-    
-    socketio.emit("output", event) # sends to everone
-    
-    print(str(out))
-    if not "newmedia" in str(out):
-      socketio.emit("output", dict(message=str(out), username='bot'))
-    time.sleep(0.5)
-    if (request.sid in state):
-        state[request.sid] += 1
-    else:
-        state[request.sid] = 0
-    
+
     if (re.search("^{'message': 'command:", str(event))):
         time.sleep(0.5)
         comm = str(event["message"]).split(':')
@@ -155,7 +120,34 @@ def myInput(event):
         #print(comm[1]);
         setInput(comm[1]);
        # if not "newmedia" in str(out):
-       #   socketio.emit("output", dict(message=getOutput(), username='bot'))
+
+
+    out = getOutput()
+
+    #CHAT MODS
+    if message_conts_word(str(out), "Flashlight") and message_conts_word(str(out), "switch"):
+        socketio.emit("lights_out", True)
+    if message_conts_word(str(out), "bunks"):
+        event["message"] = ghostify(event["message"])
+    if message_conts_word(str(out), "Engine") or message_conts_word(str(out), "engine") or message_conts_word(str(out), "switch"):
+        event["message"] = (event["message"]).upper()
+    if message_conts_word(str(out), "taste"):
+        event["message"] = scramble_output(event["message"])
+    
+    socketio.emit("output", event) # sends to everone
+
+
+    if not "newmedia" in str(out):
+      socketio.emit("output", dict(message=str(out), username='bot'))
+    time.sleep(0.5)
+    if  "newmedia" in str(out):
+      socketio.emit("output", dict(message=beginning_str, username='bot'))    
+    print(str(out))
+
+    if (request.sid in state):
+        state[request.sid] += 1
+    else:
+        state[request.sid] = 0
 
 def check():
     while True:
