@@ -1,12 +1,12 @@
 Debugging log of Inform 7
-Inform called as: C:\Program Files (x86)\Inform 7\Compilers\ni -release -internal C:\Program Files (x86)\Inform 7\Internal -project C:\Users\marc\Documents\Inform\Projects\thisone.inform -format=ulx
+Inform called as: /Volumes/Inform/Inform.app/Contents/MacOS/ni -internal /Volumes/Inform/Inform.app/Contents/Resources/Internal -external /Users/nehalingareddy/Library/Inform -project /Users/nehalingareddy/Downloads/chatroom_experiments/thisone.materials/thisone.inform -format=ulx -release
 Found language bundle 'English' (built in)
 Found language bundle 'French' (built in)
 Found language bundle 'German' (built in)
 Found language bundle 'Italian' (built in)
 Found language bundle 'Spanish' (built in)
 Found language bundle 'Swedish' (built in)
-Reading language definition from <C:\Program Files (x86)\Inform 7\Internal\Languages\English\Syntax.preform>
+Reading language definition from </Volumes/Inform/Inform.app/Contents/Resources/Internal/Languages/English/Syntax.preform>
 720 declarations read (14183 words)
 
 
@@ -14,7 +14,7 @@ Reading language definition from <C:\Program Files (x86)\Inform 7\Internal\Langu
 Phase I ... Lexical analysis
 -----------------------------------------------------
 
-I've now read your source text, which is 254 words long.
+I've now read your source text, which is 927 words long.
 
 
 -----------------------------------------------------
@@ -177,7 +177,7 @@ Phase XIII ... Compilation now complete
 -----------------------------------------------------
 
 Total of 106 files written as streams.
-CPU time: 1440 centiseconds
+CPU time: 140 centiseconds
 
 
 That concludes the debugging log from this run of Inform.
