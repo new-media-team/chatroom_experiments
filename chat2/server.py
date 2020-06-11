@@ -96,7 +96,18 @@ test_str = "this is a testing tester testo. "
 print(test_str + " THE word: " + test_word)
 print(message_conts_word(test_str, test_word))
 
+def only_all_caps(message):
+    blob = TextBlob(message)
+    word_list=list(blob.words)
+    caps = ""
+    for word in word_list:
+        if str.isupper(word):
+            caps = caps + word + " "
+    return caps
 
+
+beginning_str = "Welcome to the game. You can chat with each other via this chatroom, or interface with the game engine by typing ‘command:’ followed by what you want to do. I’ll be your eyes and ears. Directions we can go are “forward”, “aft (or back)”, “up”, and  “down.” It looks like we’re starting in a cool, dark place."
+begin = 1
 
 @socketio.on('input')
 def myInput(event):
@@ -108,13 +119,25 @@ def myInput(event):
     if event['message']:
         if message_conts_word(event["message"], "lights"):
             socketio.emit("lights_out", True)
-        if message_conts_word(event['message'], "scramble"):
-            event["message"] = scramble_output(event["message"])
-        if message_conts_word(event['message'], "ghost"):
-            event["message"] = ghostify(event["message"])
-    socketio.emit("output", event) # sends to everone
-    socketio.emit("output", dict(message="play my game by typing command: and then the command", username='bot'))
+    if begin:
+        socketio.emit("output", dict(message=beginning_str, username='bot'))
+        begin = 0
+    
+    #GET OUT PUT
     out = getOutput()
+    
+    #CHAT MODS
+    if message_conts_word(str(out), "Flashlight") and message_conts_word(str(out), "switch"):
+        socketio.emit("lights_out", True)
+    if message_conts_word(str(out), "bunks")
+        event["message"] = ghostify(event["message"])
+    if message_conts_word(str(out), "Engine"):
+        event["message"] = only_all_caps(event["message"])
+    if message_conts_word(str(out), "taste"):
+        event["message"] = scramble_output(event["message"])
+    
+    socketio.emit("output", event) # sends to everone
+    
     print(str(out))
     if not "newmedia" in str(out):
       socketio.emit("output", dict(message=getOutput(), username='bot'))
