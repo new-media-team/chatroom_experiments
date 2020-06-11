@@ -108,12 +108,14 @@ def only_all_caps(message):
 
 @socketio.on('input')
 def myInput(event):
-    beginning_str = "Welcome to the game. You can chat with each other via this chatroom, or interface with the game engine by typing ‘command:’ followed by what you want to do. I’ll be your eyes and ears. Directions we can go are “forward”, “aft (or back)”, “up”, and  “down.” It looks like we’re starting in a cool, dark place."
+    beginning_str = "Welcome to the game. You can chat with each other via this chatroom, or interface with the game engine by typing ‘command:’ followed by what you want to do. I’ll be your eyes and ears. Directions we can go are “up”, “down”, “east”, and  “west.” It looks like we’re starting in a cool, dark place."
+    command_pres = 0
     print(" sending %s onwards ..." % event)
     print(request.sid)
 
     if (re.search("^{'message': 'command:", str(event))):
         time.sleep(0.5)
+        command_pres = 1
         comm = str(event["message"]).split(':')
         print(comm);
         print(state[request.sid], len(replies), replies)
@@ -138,7 +140,8 @@ def myInput(event):
 
 
     if not "newmedia" in str(out):
-      socketio.emit("output", dict(message=str(out), username='bot'))
+        if command_pres:
+            socketio.emit("output", dict(message=str(out), username='bot'))
     time.sleep(0.5)
     if  "newmedia" in str(out):
       socketio.emit("output", dict(message=beginning_str, username='bot'))    
