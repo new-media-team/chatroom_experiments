@@ -140,7 +140,7 @@ def myInput(event):
     
     print(str(out))
     if not "newmedia" in str(out):
-      socketio.emit("output", dict(message=getOutput(), username='bot'))
+      socketio.emit("output", dict(message=str(out), username='bot'))
     time.sleep(0.5)
     if (request.sid in state):
         state[request.sid] += 1
