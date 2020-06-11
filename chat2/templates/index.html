@@ -7,7 +7,7 @@
 
     <style>
         #output {
-            background: #aaa;
+            background: rgb(124, 144, 145);
             margin: 20px;
             padding: 20px;
             font-size: 30px;
@@ -40,7 +40,7 @@
 
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
-        var lights_state = 1
+        var lights_state = 0
         socket.on("output", (event) => {
             console.log(" got: ")
             console.log(event)
@@ -56,10 +56,10 @@
             var output = document.getElementById("output")
             if(lights_state%2) {
                 console.log("light on")
-                output.style.background = "#aaa";
+                output.style.background = "rgb(193, 225, 227)";
             } else {
                 console.log("light off")
-                output.style.background = "rgb(48,48,48)";
+                output.style.background = "rgb(124, 144, 145)";
             }
         })
 
