@@ -20,8 +20,8 @@ app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
 
 
-driver = webdriver.Chrome('/Users/chris/Downloads/chromedriver') 
-driver.get('http://localhost:8000/thisone.materials/Release/play.html')
+driver = webdriver.Chrome('/Users/nehalingareddy/Downloads/chromedriver') 
+driver.get('http://0.0.0.0:7777/play.html')
 #line 24 will need to be Neha's address for ngrok server that has inform7 game
 time.sleep(1)
 
@@ -113,19 +113,26 @@ def myInput(event):
         if message_conts_word(event['message'], "ghost"):
             event["message"] = ghostify(event["message"])
     socketio.emit("output", event) # sends to everone
-    setInput(event["message"])
-    time.sleep(2)
-    # socketio.emit("output", event, include_self=False) # sends to everyone, except the browser that originated the event
-    #emit("output", event) # send only to the browser that originated the event
+    socketio.emit("output", dict(message="play my game by typing command: and then the command", username='bot'))
+    out = getOutput()
+    print(str(out))
+    if not "newmedia" in str(out):
+      socketio.emit("output", dict(message=getOutput(), username='bot'))
+    time.sleep(0.5)
     if (request.sid in state):
         state[request.sid] += 1
     else:
         state[request.sid] = 0
-    if (state[request.sid]<len(replies) and re.search("^{'message': 'command:", str(event))):
+    
+    if (re.search("^{'message': 'command:", str(event))):
         time.sleep(0.5)
+        comm = str(event["message"]).split(':')
+        print(comm);
         print(state[request.sid], len(replies), replies)
-        emit("output", dict(message=getOutput(), username='fake username'))
-
+        #print(comm[1]);
+        setInput(comm[1]);
+       # if not "newmedia" in str(out):
+       #   socketio.emit("output", dict(message=getOutput(), username='bot'))
 
 def check():
     while True:
