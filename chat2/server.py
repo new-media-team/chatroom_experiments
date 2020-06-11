@@ -129,7 +129,7 @@ def myInput(event):
         socketio.emit("lights_out", True)
     if message_conts_word(str(out), "bunks"):
         event["message"] = ghostify(event["message"])
-    if message_conts_word(str(out), "Engine") or message_conts_word(str(out), "engine"):
+    if message_conts_word(str(out), "Engine") or message_conts_word(str(out), "engine") or message_conts_word(str(out), "switch"):
         event["message"] = (event["message"]).upper()
     if message_conts_word(str(out), "taste"):
         event["message"] = scramble_output(event["message"])
