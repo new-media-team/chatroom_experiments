@@ -33,7 +33,7 @@
 
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
-
+        var lights_state = 1
         socket.on("output", (event) => {
             console.log(" got: ")
             console.log(event)
@@ -41,6 +41,19 @@
             var output = document.getElementById("output")
             output.innerHTML += "<div class='message'><span class='username'>" + event.username + "</span> <span class='message'>" + event.message + "</span></div>"
             $("#output").animate({scrollTop: $("#output")[0].scrollHeight}, 200)
+        })
+        
+        socket.on("lights_out", (lights)=> {
+            lights_state = lights_state+1
+            console.log("lights js")
+            var output = document.getElementById("output")
+            if(lights_state%2) {
+                console.log("light on")
+                output.style.background = "#aaa";
+            } else {
+                console.log("light off")
+                output.style.background = "rgb(48,48,48)";
+            }
         })
 
         var input = document.getElementById("input")
